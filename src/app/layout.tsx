@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { Providers } from '@/store/provider'
+import { DataInitializer } from '@/components/DataInitializer'
 import './globals.css'
 
 export default function RootLayout({
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body className="transition-colors duration-200">
         <Providers>
           <ThemeProvider>
+            <DataInitializer />
             {children}
           </ThemeProvider>
         </Providers>
