@@ -1,62 +1,36 @@
-# Task List PWA
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A modern, iOS-styled Progressive Web App for managing tasks. Built with Next.js, Redux Toolkit, and Tailwind CSS, featuring a responsive design and dark mode support.
+## Getting Started
 
-## Features
-
-- 📱 iOS-inspired design with smooth animations
-- 🌓 Dark mode support
-- 📝 Create, edit, and delete tasks
-- 🏷️ Optional category tagging
-- 📅 Due date scheduling
-- 💾 State management with Redux
-- 📱 Responsive design for all devices
-- ⚡ Progressive Web App capabilities
-
-## Installation
-
-First, clone the repository:
+First, run the development server:
 
 ```bash
-git clone 
-```
-## Install the dependencies:
-
-```base
-npm install
-```
-
-## Development
-Run the development server:
-```base
 npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000)
-
-## Building for Production
-Build the application:
-```base
-npm run build
-```
-Start the production server:
-```base
-npm start
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Tech Stack
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- Next.js 14
-- React 18
-- Redux Toolkit
-- TypeScript
-- Tailwind CSS
-- Progressive Web App features
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Requirements
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- Node.js 18.17 or later
-- npm 9.x or later
+## Learn More
 
-## Contributing
+To learn more about Next.js, take a look at the following resources:
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
