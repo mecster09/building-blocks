@@ -1,101 +1,228 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Task, Category } from '@/types/task';
+
+interface EditingTask {
+  id: string;
+  title: string;
+  category: string;
+  dueDate: string | null;
+}
+
+function TaskItem({ task, onToggleTask, onEditTask, onDeleteTask, formatDate }: {
+  task: Task;
+  onToggleTask: (id: string) => void;
+  onEditTask: (task: EditingTask) => void;
+  onDeleteTask: (id: string) => void;
+  formatDate: (date: string | null) => string;
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState<EditingTask>({
+    id: task.id,
+    title: task.title,
+    category: task.category,
+    dueDate: task.dueDate,
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onEditTask(editForm);
+    setIsEditing(false);
+  };
+
+  if (isEditing) {
+    return (
+      <tr>
+        <td colSpan={5} className="p-2">
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <input
+              type="text"
+              value={editForm.title}
+              onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+              className="w-full p-2 rounded border border-gray-200 dark:border-gray-800 bg-background"
+              required
+            />
+            <input
+              type="text"
+              value={editForm.category}
+              onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+              className="w-full p-2 rounded border border-gray-200 dark:border-gray-800 bg-background"
+              placeholder="Category (optional)"
+            />
+            <input
+              type="date"
+              value={editForm.dueDate || ''}
+              onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value || null })}
+              className="w-full p-2 rounded border border-gray-200 dark:border-gray-800 bg-background"
+            />
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="px-3 py-1 rounded bg-foreground text-background"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="px-3 py-1 rounded border border-gray-200 dark:border-gray-800"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </td>
+      </tr>
+    );
+  }
+
+  return (
+    <tr className="border-b border-gray-200 dark:border-gray-800">
+      <td className="p-3">
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => onToggleTask(task.id)}
+          className="h-4 w-4"
+        />
+      </td>
+      <td className="p-3">
+        <span className={task.completed ? 'line-through opacity-50' : ''}>
+          {task.title}
+        </span>
+      </td>
+      <td className="p-3 text-sm opacity-70">
+        {task.category}
+      </td>
+      <td className="p-3 text-sm opacity-70 whitespace-nowrap">
+        {formatDate(task.dueDate)}
+      </td>
+      <td className="p-3">
+        <div className="flex justify-end gap-1">
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            ✏️
+          </button>
+          <button
+            type="button"
+            onClick={() => onDeleteTask(task.id)}
+            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            🗑️
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    const savedCategories = localStorage.getItem('categories');
+    if (savedTasks) setTasks(JSON.parse(savedTasks));
+    if (savedCategories) setCategories(JSON.parse(savedCategories));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    localStorage.setItem('categories', JSON.stringify(categories));
+  }, [categories]);
+
+  const toggleTaskComplete = (taskId: string) => {
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'No due date';
+    return new Date(dateString).toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const handleEditTask = (editedTask: EditingTask) => {
+    setTasks(prevTasks => prevTasks.map(task =>
+      task.id === editedTask.id
+        ? {
+            ...task,
+            title: editedTask.title,
+            category: editedTask.category.trim() || 'Uncategorized',
+            dueDate: editedTask.dueDate,
+          }
+        : task
+    ));
+
+    if (editedTask.category.trim() && !categories.some(cat => 
+      cat.name.toLowerCase() === editedTask.category.toLowerCase()
+    )) {
+      const newCategory: Category = {
+        id: crypto.randomUUID(),
+        name: editedTask.category.trim(),
+      };
+      setCategories(prevCategories => [...prevCategories, newCategory]);
+    }
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    if (confirm('Are you sure you want to delete this task?')) {
+      setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    }
+  };
+
+  // Sort tasks by title
+  const sortedTasks = [...tasks].sort((a, b) => a.title.localeCompare(b.title));
+
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div>
+        <h2 className="text-2xl font-bold mb-6">Tasks</h2>
+        <div className="overflow-x-auto rounded border border-gray-200 dark:border-gray-800">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-800/50">
+              <tr>
+                <th className="w-12 p-3"></th>
+                <th className="p-3 text-left">Task</th>
+                <th className="p-3 text-left">Category</th>
+                <th className="p-3 text-left">Due Date</th>
+                <th className="w-20 p-3"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+              {sortedTasks.map(task => (
+                <TaskItem
+                  key={task.id}
+                  task={task}
+                  onToggleTask={toggleTaskComplete}
+                  onEditTask={handleEditTask}
+                  onDeleteTask={handleDeleteTask}
+                  formatDate={formatDate}
+                />
+              ))}
+              {tasks.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center opacity-50">
+                    No tasks yet. Add one above!
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }

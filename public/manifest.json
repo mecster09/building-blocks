@@ -1,11 +1,11 @@
 {
-  "name": "Mecster09 Web App",
-  "short_name": "Mec09 App",
-  "description": "Github Pages Web App",
+  "name": "Mecster09 Task Manager",
+  "short_name": "Mec09 Tasks",
+  "description": "Task Manager Web App",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "icons": [
     {
       "src": "/icons/mecster09-512-sq-192.png",
